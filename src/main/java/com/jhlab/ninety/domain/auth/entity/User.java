@@ -1,5 +1,6 @@
 package com.jhlab.ninety.domain.auth.entity;
 
+import com.jhlab.ninety.domain.auth.type.UserRole;
 import com.jhlab.ninety.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -26,10 +27,14 @@ public class User extends BaseEntity {
     @Column(length = 15)
     private String phoneNumber;
 
-    public User(String email, String password, String name, String phoneNumber) {
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+    public User(String email, String password, String name, String phoneNumber, UserRole role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.role = role;
     }
 }
