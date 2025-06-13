@@ -3,8 +3,6 @@ package com.jhlab.ninety.domain.auth.dto;
 import com.jhlab.ninety.domain.auth.type.UserRole;
 import lombok.Getter;
 
-import java.time.ZonedDateTime;
-
 @Getter
 public class UserJwtResponseDto {
     private final Long id;
