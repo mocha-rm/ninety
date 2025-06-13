@@ -33,9 +33,10 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     public static final String[] WHITE_LIST = {
-        "/",
-        "/api/signup",
-        "/api/login"
+            "/",
+            "/api/signup",
+            "/api/login",
+            "/api/oauth2/google"
     };
 
     @Bean
