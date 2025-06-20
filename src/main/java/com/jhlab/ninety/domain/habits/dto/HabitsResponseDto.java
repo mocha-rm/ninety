@@ -4,32 +4,36 @@ import com.jhlab.ninety.domain.habits.entity.Habits;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Set;
 
 @Getter
 @RequiredArgsConstructor
 public class HabitsResponseDto {
     private final Long id;
+    private final Long userId;
     private final String title;
     private final String description;
-    private final LocalDateTime startAt;
-    private final LocalDateTime endAt;
-    private final int duration;
-    private final LocalTime reminderTime;
+    private final LocalDate startAt;
+    private final LocalDate endAt;
+    private final Set<DayOfWeek> repeatDays;
     private final boolean isAlarmEnabled;
+    private final LocalTime reminderTime;
 
 
     public static HabitsResponseDto toDto(Habits habits) {
         return new HabitsResponseDto(
                 habits.getId(),
+                habits.getUser().getId(),
                 habits.getTitle(),
                 habits.getDescription(),
                 habits.getStartAt(),
                 habits.getEndAt(),
-                habits.getDuration(),
-                habits.getReminderTime(),
-                habits.isAlarmEnabled()
+                habits.getRepeatDays(),
+                habits.isAlarmEnabled(),
+                habits.getReminderTime()
         );
     }
 }

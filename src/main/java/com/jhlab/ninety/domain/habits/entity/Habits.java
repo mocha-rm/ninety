@@ -7,15 +7,17 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class Habits extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,11 +29,9 @@ public class Habits extends BaseEntity {
     @Column(length = 255)
     private String description;
 
-    private LocalDateTime startAt;
+    private LocalDate startAt;
 
-    private LocalDateTime endAt;
-
-    private int duration;
+    private LocalDate endAt;
 
     private LocalTime reminderTime;
 
@@ -48,16 +48,25 @@ public class Habits extends BaseEntity {
 
 
     @Builder
-    public Habits(String title, String description, LocalDateTime startAt, LocalDateTime endAt, int duration,
+    public Habits(String title, String description, LocalDate startAt, LocalDate endAt,
                   LocalTime reminderTime, boolean isAlarmEnabled, Set<DayOfWeek> repeatDays, User user) {
         this.title = title;
         this.description = description;
         this.startAt = startAt;
         this.endAt = endAt;
-        this.duration = duration;
         this.reminderTime = reminderTime;
         this.isAlarmEnabled = isAlarmEnabled;
         this.repeatDays = repeatDays;
         this.user = user;
+    }
+
+    public void updateHabits(String title, String description, LocalDate startAt, LocalDate endAt,
+                             LocalTime reminderTime, boolean isAlarmEnabled) {
+        this.title = title;
+        this.description = description;
+        this.startAt = startAt;
+        this.endAt = endAt;
+        this.reminderTime = reminderTime;
+        this.isAlarmEnabled = isAlarmEnabled;
     }
 }
