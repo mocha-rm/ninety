@@ -6,14 +6,15 @@ import com.jhlab.ninety.domain.habits.dto.HabitsRequestDto;
 import com.jhlab.ninety.domain.habits.dto.HabitsResponseDto;
 import com.jhlab.ninety.domain.habits.entity.Habits;
 import com.jhlab.ninety.domain.habits.repository.HabitsRepository;
+import com.jhlab.ninety.global.common.exception.GlobalException;
+import com.jhlab.ninety.global.common.exception.type.HabitsErrorCode;
 import com.jhlab.ninety.global.security.auth.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Objects;
 
@@ -48,7 +49,7 @@ public class HabitsServiceImpl implements HabitsService {
     @Transactional(readOnly = true)
     public HabitsResponseDto findHabits(Long habitsId) {
         Habits habits = habitsRepository.findByIdWithUserAndRepeatDays(habitsId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new GlobalException(HabitsErrorCode.Habits_NOT_FOUND));
 
         return HabitsResponseDto.toDto(habits);
     }
@@ -62,14 +63,7 @@ public class HabitsServiceImpl implements HabitsService {
     @Override
     @Transactional
     public HabitsResponseDto updateHabits(Long habitsId, HabitsRequestDto requestDto, UserDetailsImpl userDetails) {
-        User user = userService.getUserFromDB(userDetails.getUsername());
-
-        Habits habits = habitsRepository.findByIdWithUserAndRepeatDays(habitsId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        if (!Objects.equals(habits.getUser().getId(), user.getId())) {
-            throw new RuntimeException("수정 권한이 없습니다.");
-        }
+        Habits habits = checkAuthorization(habitsId, userDetails);
 
         habits.updateHabits(
                 requestDto.getTitle(),
@@ -88,15 +82,21 @@ public class HabitsServiceImpl implements HabitsService {
     @Override
     @Transactional
     public void deleteHabits(Long habitsId, UserDetailsImpl userDetails) {
+        Habits habits = checkAuthorization(habitsId, userDetails);
+
+        habitsRepository.delete(habits);
+    }
+
+    private Habits checkAuthorization(Long habitsId, UserDetailsImpl userDetails) {
         User user = userService.getUserFromDB(userDetails.getUsername());
 
         Habits habits = habitsRepository.findByIdWithUserAndRepeatDays(habitsId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new GlobalException(HabitsErrorCode.Habits_NOT_FOUND));
 
         if (!Objects.equals(habits.getUser().getId(), user.getId())) {
-            throw new RuntimeException("수정 권한이 없습니다.");
+            throw new AccessDeniedException("");
         }
 
-        habitsRepository.delete(habits);
+        return habits;
     }
 }

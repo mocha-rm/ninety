@@ -7,19 +7,19 @@ import com.jhlab.ninety.domain.auth.dto.auth.SignUpRequestDto;
 import com.jhlab.ninety.domain.auth.entity.User;
 import com.jhlab.ninety.domain.auth.repository.UserRepository;
 import com.jhlab.ninety.domain.auth.type.UserRole;
+import com.jhlab.ninety.global.common.exception.GlobalException;
+import com.jhlab.ninety.global.common.exception.type.AuthErrorCode;
 import com.jhlab.ninety.global.security.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserResponseDto signUp(SignUpRequestDto requestDto) {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
-            throw new RuntimeException("이메일 중복");
+            throw new GlobalException(AuthErrorCode.EMAIL_DUPLICATED);
         }
 
         User user = new User(
@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userService.getUserFromDB(requestDto.getEmail());
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new GlobalException(AuthErrorCode.PASSWORD_MISMATCH);
         }
 
         Authentication authentication = authenticationManager.authenticate(
