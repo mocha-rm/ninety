@@ -8,8 +8,12 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
@@ -45,5 +49,23 @@ public class GlobalExceptionHandler {
         log.error("Unexpected error occurred", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.error("서버 내부 오류가 발생했습니다."));
+    }
+
+    @ExceptionHandler(GlobalException.class)
+    public ResponseEntity<ApiResponse<Void>> handleGlobalException(GlobalException e) {
+        log.error("[GlobalException] {}", e.getMessage());
+        return ResponseEntity.status(e.getHttpStatus())
+                .body(ApiResponse.error(e.getErrorCode() + " - " + e.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<?> handleValidationException(MethodArgumentNotValidException e) {
+        Map<String, String> fieldErrors = new HashMap<>();
+        e.getBindingResult().getFieldErrors().forEach(error ->
+                fieldErrors.put(error.getField(), error.getDefaultMessage())
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error("유효성 검사 실패", fieldErrors));
     }
 } 
