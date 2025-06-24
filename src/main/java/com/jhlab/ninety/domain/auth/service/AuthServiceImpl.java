@@ -46,6 +46,7 @@ public class AuthServiceImpl implements AuthService {
                 passwordEncoder.encode(requestDto.getPassword()),
                 requestDto.getName(),
                 requestDto.getPhoneNumber(),
+                requestDto.getNickName(),
                 UserRole.NORMAL
         );
 
@@ -104,6 +105,29 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Map<String, Object> refreshAccessToken(String refreshToken) {
-        return Map.of();
+        Long userId = jwtUtil.getUserId(refreshToken);
+
+        validateRefreshToken(refreshToken, userId);
+
+        User user = userService.getUserFromDB(userId);
+
+        String newAccessToken = jwtUtil.generateAccessToken(user);
+        Claims newClaims = jwtUtil.parseClaims(newAccessToken);
+
+        return Map.of(
+                "accessToken", newAccessToken,
+                "exp", newClaims.getExpiration()
+        );
+    }
+
+    private void validateRefreshToken(String refreshToken, Long userId) {
+        String redisKey = "RT:" + userId;
+        String storedToken = (String) redisTemplate.opsForValue().get(redisKey);
+
+        log.info("Stored Token: {}", storedToken);
+
+        if (storedToken == null || !storedToken.equals(refreshToken)) {
+            throw new GlobalException(AuthErrorCode.INVALID_REFRESH_TOKEN);
+        }
     }
 }

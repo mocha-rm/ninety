@@ -107,6 +107,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
                 email,
                 null, // 소셜 로그인은 비밀번호가 없음
                 name,
+                null,
                 null, // 전화번호는 선택적으로 추가 가능
                 UserRole.NORMAL
         );
