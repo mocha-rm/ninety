@@ -24,17 +24,29 @@ public class User extends BaseEntity {
     @Column(length = 10)
     private String name;
 
+    @Column(length = 20)
+    private String nickName;
+
     @Column(length = 15)
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    public User(String email, String password, String name, String phoneNumber, UserRole role) {
+    public User(String email, String password, String name, String nickName, String phoneNumber, UserRole role) {
         this.email = email;
         this.password = password;
         this.name = name;
+        this.nickName = nickName;
         this.phoneNumber = phoneNumber;
         this.role = role;
+    }
+
+    public void updateNickname(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }
