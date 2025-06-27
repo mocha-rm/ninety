@@ -1,21 +1,23 @@
 package com.jhlab.ninety.domain.auth.dto;
 
 import com.jhlab.ninety.domain.auth.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserResponseDto {
-    private final Long id;
-    private final String email;
-    private final String name;
-    private final String nickName;
-    private final String phoneNumber;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private Long id;
+    private String email;
+    private String name;
+    private String nickName;
+    private String phoneNumber;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public static UserResponseDto toDto(User user) {
         return new UserResponseDto(

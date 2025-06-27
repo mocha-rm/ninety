@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    @Cacheable(value = "user", key = "#userId")
+    @CacheEvict(value = "user", key = "#userId")
     public UserResponseDto updateNickname(Long userId, UserNicknameUpdateRequestDto requestDto) {
         User user = getUserFromDB(userId);
         user.updateNickname(requestDto.getNickName());
