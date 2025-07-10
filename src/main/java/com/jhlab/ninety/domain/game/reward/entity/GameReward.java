@@ -22,4 +22,12 @@ public class GameReward extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RewardType rewardType;
+
+    public GameReward(Long habitId, Long userId, Integer coinsEarned, Integer experienceEarned, RewardType rewardType) {
+        this.habitId = habitId;
+        this.userId = userId;
+        this.coinsEarned = coinsEarned;
+        this.experienceEarned = experienceEarned;
+        this.rewardType = rewardType;
+    }
 }
