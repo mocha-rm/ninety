@@ -1,9 +1,9 @@
 package com.jhlab.ninety.domain.game.reward.service;
 
+import com.jhlab.ninety.domain.game.reward.dto.GameRewardRequestDto;
 import com.jhlab.ninety.domain.game.reward.dto.GameRewardResponseDto;
 import com.jhlab.ninety.domain.game.reward.entity.GameReward;
 import com.jhlab.ninety.domain.game.reward.repository.GameRewardRepository;
-import com.jhlab.ninety.domain.game.reward.type.RewardType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,13 +17,13 @@ public class GameRewardServiceImpl implements GameRewardService {
 
     @Override
     @Transactional
-    public GameRewardResponseDto createReward(Long userId, Long habitId, int coins, int exp, RewardType type) {
+    public GameRewardResponseDto createReward(Long userId, Long habitId, GameRewardRequestDto requestDto) {
         GameReward reward = new GameReward(
                 habitId,
                 userId,
-                coins,
-                exp,
-                type
+                requestDto.getCoins(),
+                requestDto.getExp(),
+                requestDto.getRewardType()
         );
 
         gameRewardRepository.save(reward);

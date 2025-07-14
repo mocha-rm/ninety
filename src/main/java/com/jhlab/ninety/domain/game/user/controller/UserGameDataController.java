@@ -4,9 +4,11 @@ import com.jhlab.ninety.domain.game.user.dto.UserGameDataRequestDto;
 import com.jhlab.ninety.domain.game.user.dto.UserGameDataResponseDto;
 import com.jhlab.ninety.domain.game.user.service.UserGameDataService;
 import com.jhlab.ninety.global.common.exception.response.ApiResponse;
+import com.jhlab.ninety.global.security.auth.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,21 +18,33 @@ public class UserGameDataController {
     private final UserGameDataService userGameDataService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserGameDataResponseDto>> createUserGameData(@RequestParam Long userId) {
+    public ResponseEntity<ApiResponse<UserGameDataResponseDto>> createUserGameData(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.success("게임 데이터 생성 성공", null));
+                .body(ApiResponse.success("게임 데이터 생성 성공",
+                        userGameDataService.createUserGameData(userDetails.getUser().getId()))
+                );
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<UserGameDataResponseDto>> getUserGameData(@RequestParam Long userId) {
+    public ResponseEntity<ApiResponse<UserGameDataResponseDto>> getUserGameData(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.success("게임 데이터 로드 성공", null));
+                .body(ApiResponse.success("게임 데이터 로드 성공",
+                        userGameDataService.getUserGameData(userDetails.getUser().getId()))
+                );
     }
 
     @PatchMapping
-    public ResponseEntity<ApiResponse<UserGameDataResponseDto>> updateUserGameData(@RequestParam Long userId,
-                                                                                   @RequestBody UserGameDataRequestDto requestDto) {
+    public ResponseEntity<ApiResponse<UserGameDataResponseDto>> updateUserGameData(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody UserGameDataRequestDto requestDto) {
+
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.success("게임 데이터 수정 성공", null));
+                .body(ApiResponse.success("게임 데이터 수정 성공",
+                        userGameDataService.updateUserGameData(userDetails.getUser().getId(), requestDto))
+                );
     }
 }
