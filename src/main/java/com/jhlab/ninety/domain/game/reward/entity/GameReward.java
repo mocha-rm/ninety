@@ -3,11 +3,14 @@ package com.jhlab.ninety.domain.game.reward.entity;
 import com.jhlab.ninety.domain.game.reward.type.RewardType;
 import com.jhlab.ninety.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @Table(name = "game_reward")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GameReward extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

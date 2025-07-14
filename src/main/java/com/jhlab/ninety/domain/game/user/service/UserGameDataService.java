@@ -1,5 +1,6 @@
 package com.jhlab.ninety.domain.game.user.service;
 
+import com.jhlab.ninety.domain.game.user.dto.UserGameDataRequestDto;
 import com.jhlab.ninety.domain.game.user.dto.UserGameDataResponseDto;
 
 public interface UserGameDataService {
@@ -7,5 +8,5 @@ public interface UserGameDataService {
 
     UserGameDataResponseDto getUserGameData(Long userId);
 
-    UserGameDataResponseDto updateUserGameData(Long userId, int coins, int level, int experience);
+    UserGameDataResponseDto updateUserGameData(Long userId, UserGameDataRequestDto requestDto);
 }
