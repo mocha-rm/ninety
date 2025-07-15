@@ -1,11 +1,15 @@
 package com.jhlab.ninety.domain.auth.entity;
 
 import com.jhlab.ninety.domain.auth.type.UserRole;
+import com.jhlab.ninety.domain.game.room.entity.UserItem;
+import com.jhlab.ninety.domain.game.room.entity.UserRoom;
 import com.jhlab.ninety.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +36,12 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserItem> userItems;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserRoom> userRooms;
 
     public User(String email, String password, String name, String nickName, String phoneNumber, UserRole role) {
         this.email = email;
