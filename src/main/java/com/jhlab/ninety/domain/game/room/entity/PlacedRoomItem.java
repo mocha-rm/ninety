@@ -26,7 +26,7 @@ public class PlacedRoomItem extends BaseEntity {
     @JoinColumn(name = "item_id")
     private RoomItem item;
 
-    private Integer posX;
-    private Integer posY;
-    private Integer rotation;
+    private double posX;
+    private double posY;
+    private double rotation;
 }
