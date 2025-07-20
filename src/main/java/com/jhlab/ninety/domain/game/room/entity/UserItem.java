@@ -34,4 +34,8 @@ public class UserItem extends BaseEntity {
         this.item = item;
         this.isPlaced = isPlaced;
     }
+
+    public void updateIsPlaced(boolean isPlaced) {
+        this.isPlaced = isPlaced;
+    }
 }
