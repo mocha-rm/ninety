@@ -5,8 +5,10 @@ import com.jhlab.ninety.domain.game.user.dto.UserGameDataResponseDto;
 import com.jhlab.ninety.domain.game.user.entity.UserGameData;
 import com.jhlab.ninety.domain.game.user.repository.UserGameDataRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -30,15 +32,15 @@ public class UserGameDataServiceImpl implements UserGameDataService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserGameDataResponseDto getUserGameData(Long userId) {
-        UserGameData data = userGameDataRepository.findByUserId(userId);
+    public UserGameDataResponseDto findUserGameData(Long userId) {
+        UserGameData data = getUserGameDataFromDB(userId);
         return UserGameDataResponseDto.toDto(data);
     }
 
     @Override
     @Transactional
     public UserGameDataResponseDto updateUserGameData(Long userId, UserGameDataRequestDto requestDto) {
-        UserGameData data = userGameDataRepository.findByUserId(userId);
+        UserGameData data = getUserGameDataFromDB(userId);
 
         data.updateCoins(requestDto.getCoins());
         data.updateLevel(requestDto.getLevel());
@@ -47,5 +49,12 @@ public class UserGameDataServiceImpl implements UserGameDataService {
         userGameDataRepository.save(data);
 
         return UserGameDataResponseDto.toDto(data);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserGameData getUserGameDataFromDB(Long userId) {
+        return userGameDataRepository.findByUserId(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

@@ -28,12 +28,12 @@ public class UserGameDataController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<UserGameDataResponseDto>> getUserGameData(
+    public ResponseEntity<ApiResponse<UserGameDataResponseDto>> findUserGameData(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success("게임 데이터 로드 성공",
-                        userGameDataService.getUserGameData(userDetails.getUser().getId()))
+                        userGameDataService.findUserGameData(userDetails.getUser().getId()))
                 );
     }
 

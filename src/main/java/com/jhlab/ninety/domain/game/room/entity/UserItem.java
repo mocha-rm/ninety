@@ -28,4 +28,14 @@ public class UserItem extends BaseEntity {
     private RoomItem item;
 
     private Boolean isPlaced;
+
+    public UserItem(User user, RoomItem item, boolean isPlaced) {
+        this.user = user;
+        this.item = item;
+        this.isPlaced = isPlaced;
+    }
+
+    public void updateIsPlaced(boolean isPlaced) {
+        this.isPlaced = isPlaced;
+    }
 }
