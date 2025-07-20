@@ -31,5 +31,5 @@ public class UserRoom extends BaseEntity {
     private RoomItem roomItem;
 
     @OneToMany(mappedBy = "userRoom", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PlacedRoomItem> items;
+    private List<PlacedItem> items;
 }

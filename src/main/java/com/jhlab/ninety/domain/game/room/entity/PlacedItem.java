@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "placed_room_item")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PlacedRoomItem extends BaseEntity {
+public class PlacedItem extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,4 +29,18 @@ public class PlacedRoomItem extends BaseEntity {
     private double posX;
     private double posY;
     private double rotation;
+
+    public PlacedItem(UserRoom userRoom, RoomItem item, double posX, double posY, double rotation) {
+        this.userRoom = userRoom;
+        this.item = item;
+        this.posX = posX;
+        this.posY = posY;
+        this.rotation = rotation;
+    }
+
+    public void updatePosition(double posX, double posY, double rotation) {
+        this.posX = posX;
+        this.posY = posY;
+        this.rotation = rotation;
+    }
 }

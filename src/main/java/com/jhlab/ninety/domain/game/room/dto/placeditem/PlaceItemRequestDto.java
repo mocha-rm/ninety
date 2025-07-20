@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class PlaceItemRequestDto {
-    private final double x;
-    private final double y;
-    private final double z;
+    private final double posX;
+    private final double posY;
+    private final double rotation;
 }
