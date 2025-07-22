@@ -1,4 +1,4 @@
-package com.jhlab.ninety.domain.game.room.service;
+package com.jhlab.ninety.domain.game.room.service.placeditem;
 
 import com.jhlab.ninety.domain.auth.entity.User;
 import com.jhlab.ninety.domain.auth.service.UserService;
@@ -18,10 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class PlacedItemServiceImpl implements PlacedItemService {
-    private final UserService userService;
     private final UserItemRepository userItemRepository;
     private final UserRoomRepository userRoomRepository;
     private final PlacedItemRepository placedItemRepository;
+
+    private final UserService userService;
 
     @Override
     @Transactional

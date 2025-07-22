@@ -18,6 +18,8 @@ public class GameRewardServiceImpl implements GameRewardService {
     @Override
     @Transactional
     public GameRewardResponseDto createReward(Long userId, Long habitId, GameRewardRequestDto requestDto) {
+        //TODO : UserGameData 에 리워드 결과 반영하기
+
         GameReward reward = new GameReward(
                 habitId,
                 userId,

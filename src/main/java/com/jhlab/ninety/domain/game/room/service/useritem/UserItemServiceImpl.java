@@ -1,13 +1,12 @@
-package com.jhlab.ninety.domain.game.room.service;
+package com.jhlab.ninety.domain.game.room.service.useritem;
 
 import com.jhlab.ninety.domain.auth.entity.User;
 import com.jhlab.ninety.domain.auth.service.UserService;
 import com.jhlab.ninety.domain.game.room.dto.useritem.UserItemResponseDto;
 import com.jhlab.ninety.domain.game.room.entity.RoomItem;
 import com.jhlab.ninety.domain.game.room.entity.UserItem;
-import com.jhlab.ninety.domain.game.room.repository.PlacedItemRepository;
+import com.jhlab.ninety.domain.game.room.repository.RoomItemRepository;
 import com.jhlab.ninety.domain.game.room.repository.UserItemRepository;
-import com.jhlab.ninety.domain.game.room.repository.UserRoomRepository;
 import com.jhlab.ninety.domain.game.room.type.ItemCategory;
 import com.jhlab.ninety.domain.game.user.entity.UserGameData;
 import com.jhlab.ninety.domain.game.user.service.UserGameDataService;
@@ -25,17 +24,19 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserItemServiceImpl implements UserItemService {
     private final UserItemRepository userItemRepository;
-    private final PlacedItemRepository placedRoomItemRepository;
-    private final RoomItemService roomItemService;
+    private final RoomItemRepository roomItemRepository;
+
     private final UserService userService;
     private final UserGameDataService userGameDataService;
-    private final UserRoomRepository userRoomRepository;
 
     @Override
     @Transactional
     public void buyItem(Long itemId, Long userId) {
+        RoomItem item = roomItemRepository.findById(itemId)
+                .orElseThrow(() -> new GlobalException(GameErrorCode.ITEM_NOT_FOUND));
+
         User user = userService.getUserFromDB(userId);
-        RoomItem item = roomItemService.getRoomItemFromDB(itemId);
+
         UserGameData userGameData = userGameDataService.getUserGameDataFromDB(userId);
 
         if (userItemRepository.findByUserIdWithItemId(userId, itemId).isPresent()) {
@@ -45,6 +46,8 @@ public class UserItemServiceImpl implements UserItemService {
         if (item.getPrice() > userGameData.getCoins()) {
             throw new GlobalException(GameErrorCode.NOT_ENOUGH_POINT);
         }
+
+        // TODO : UserGameData 에 구입 결과 반영하기 (코인정보)
 
         UserItem userItem = new UserItem(
                 user,

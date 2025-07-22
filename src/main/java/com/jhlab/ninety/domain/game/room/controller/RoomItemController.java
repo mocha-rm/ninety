@@ -2,7 +2,7 @@ package com.jhlab.ninety.domain.game.room.controller;
 
 import com.jhlab.ninety.domain.game.room.dto.roomitem.RoomItemRequestDto;
 import com.jhlab.ninety.domain.game.room.dto.roomitem.RoomItemResponseDto;
-import com.jhlab.ninety.domain.game.room.service.RoomItemService;
+import com.jhlab.ninety.domain.game.room.service.roomitem.RoomItemService;
 import com.jhlab.ninety.global.common.exception.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
