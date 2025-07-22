@@ -1,4 +1,4 @@
-package com.jhlab.ninety.domain.game.room.service;
+package com.jhlab.ninety.domain.game.room.service.roomitem;
 
 import com.jhlab.ninety.domain.game.room.dto.roomitem.RoomItemRequestDto;
 import com.jhlab.ninety.domain.game.room.dto.roomitem.RoomItemResponseDto;

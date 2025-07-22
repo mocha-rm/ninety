@@ -26,10 +26,10 @@ public class UserRoom extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomItem_id")
-    private RoomItem roomItem;
-
     @OneToMany(mappedBy = "userRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlacedItem> items;
+
+    public UserRoom(User user) {
+        this.user = user;
+    }
 }

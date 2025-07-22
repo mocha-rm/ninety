@@ -1,7 +1,7 @@
 package com.jhlab.ninety.domain.game.room.controller;
 
 import com.jhlab.ninety.domain.game.room.dto.placeditem.PlaceItemRequestDto;
-import com.jhlab.ninety.domain.game.room.service.PlacedItemService;
+import com.jhlab.ninety.domain.game.room.service.placeditem.PlacedItemService;
 import com.jhlab.ninety.global.common.exception.response.ApiResponse;
 import com.jhlab.ninety.global.security.auth.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;

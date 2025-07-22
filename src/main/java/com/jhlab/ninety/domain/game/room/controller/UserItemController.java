@@ -2,7 +2,7 @@ package com.jhlab.ninety.domain.game.room.controller;
 
 import com.jhlab.ninety.domain.game.room.dto.useritem.UserItemRequestDto;
 import com.jhlab.ninety.domain.game.room.dto.useritem.UserItemResponseDto;
-import com.jhlab.ninety.domain.game.room.service.UserItemService;
+import com.jhlab.ninety.domain.game.room.service.useritem.UserItemService;
 import com.jhlab.ninety.domain.game.room.type.ItemCategory;
 import com.jhlab.ninety.global.common.exception.response.ApiResponse;
 import com.jhlab.ninety.global.security.auth.UserDetailsImpl;

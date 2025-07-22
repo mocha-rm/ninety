@@ -4,11 +4,13 @@ import com.jhlab.ninety.domain.game.user.dto.UserGameDataRequestDto;
 import com.jhlab.ninety.domain.game.user.dto.UserGameDataResponseDto;
 import com.jhlab.ninety.domain.game.user.entity.UserGameData;
 import com.jhlab.ninety.domain.game.user.repository.UserGameDataRepository;
+import com.jhlab.ninety.global.common.exception.GlobalException;
+import com.jhlab.ninety.global.common.exception.type.GameErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,9 +20,15 @@ public class UserGameDataServiceImpl implements UserGameDataService {
     @Override
     @Transactional
     public UserGameDataResponseDto createUserGameData(Long userId) {
+        Optional<UserGameData> prevData = userGameDataRepository.findByUserId(userId);
+
+        if (prevData.isPresent()) {
+            throw new GlobalException(GameErrorCode.USER_GAME_DATA_EXIST);
+        }
+
         UserGameData data = new UserGameData(
                 userId,
-                0,
+                500,
                 1,
                 0
         );
@@ -55,6 +63,6 @@ public class UserGameDataServiceImpl implements UserGameDataService {
     @Transactional(readOnly = true)
     public UserGameData getUserGameDataFromDB(Long userId) {
         return userGameDataRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new GlobalException(GameErrorCode.USER_GAME_DATA_NOT_FOUND));
     }
 }

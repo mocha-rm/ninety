@@ -1,14 +1,14 @@
-package com.jhlab.ninety.domain.game.room.service;
+package com.jhlab.ninety.domain.game.room.service.roomitem;
 
 import com.jhlab.ninety.domain.game.room.dto.roomitem.RoomItemRequestDto;
 import com.jhlab.ninety.domain.game.room.dto.roomitem.RoomItemResponseDto;
 import com.jhlab.ninety.domain.game.room.entity.RoomItem;
 import com.jhlab.ninety.domain.game.room.repository.RoomItemRepository;
+import com.jhlab.ninety.global.common.exception.GlobalException;
+import com.jhlab.ninety.global.common.exception.type.GameErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +65,6 @@ public class RoomItemServiceImpl implements RoomItemService {
     @Override
     public RoomItem getRoomItemFromDB(Long roomItemId) {
         return roomItemRepository.findById(roomItemId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new GlobalException(GameErrorCode.ITEM_NOT_FOUND));
     }
 }

@@ -7,6 +7,8 @@ import com.jhlab.ninety.domain.auth.dto.auth.SignUpRequestDto;
 import com.jhlab.ninety.domain.auth.entity.User;
 import com.jhlab.ninety.domain.auth.repository.UserRepository;
 import com.jhlab.ninety.domain.auth.type.UserRole;
+import com.jhlab.ninety.domain.game.room.service.userroom.UserRoomService;
+import com.jhlab.ninety.domain.game.user.service.UserGameDataService;
 import com.jhlab.ninety.global.common.exception.GlobalException;
 import com.jhlab.ninety.global.common.exception.type.AuthErrorCode;
 import com.jhlab.ninety.global.security.utils.JwtUtil;
@@ -29,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final UserService userService;
+    private final UserGameDataService userGameDataService;
+    private final UserRoomService userRoomService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -51,6 +55,9 @@ public class AuthServiceImpl implements AuthService {
         );
 
         userRepository.save(user);
+
+        userGameDataService.createUserGameData(user.getId());
+        userRoomService.createInitialUserRoom(user.getId());
 
         return UserResponseDto.toDto(user);
     }

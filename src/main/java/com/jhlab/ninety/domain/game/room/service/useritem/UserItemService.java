@@ -1,4 +1,4 @@
-package com.jhlab.ninety.domain.game.room.service;
+package com.jhlab.ninety.domain.game.room.service.useritem;
 
 import com.jhlab.ninety.domain.game.room.dto.useritem.UserItemResponseDto;
 import com.jhlab.ninety.domain.game.room.type.ItemCategory;

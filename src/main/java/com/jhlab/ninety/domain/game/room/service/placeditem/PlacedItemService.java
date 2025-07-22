@@ -1,4 +1,4 @@
-package com.jhlab.ninety.domain.game.room.service;
+package com.jhlab.ninety.domain.game.room.service.placeditem;
 
 import com.jhlab.ninety.domain.game.room.dto.placeditem.PlaceItemRequestDto;
 
