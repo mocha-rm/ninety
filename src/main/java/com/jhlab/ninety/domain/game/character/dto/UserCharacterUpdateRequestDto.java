@@ -7,5 +7,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserCharacterUpdateRequestDto {
     private final String nickname;
-    private final boolean isActive;
+    private final Boolean isActive;
 }

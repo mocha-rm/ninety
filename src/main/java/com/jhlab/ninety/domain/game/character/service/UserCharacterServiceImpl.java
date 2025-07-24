@@ -39,8 +39,10 @@ public class UserCharacterServiceImpl implements UserCharacterService {
         UserGameData userGameData = userGameDataService.getUserGameDataFromDB(userId);
 
         if (userGameData.getCoins() < character.getPrice()) {
-            throw new GlobalException(GameErrorCode.NOT_ENOUGH_POINT);
+            throw new GlobalException(GameErrorCode.NOT_ENOUGH_COINS);
         }
+
+        //TODO : 중복 구매 방지하기
 
         userGameData.updateCoins(userGameData.getCoins() - character.getPrice());
 
@@ -64,6 +66,14 @@ public class UserCharacterServiceImpl implements UserCharacterService {
     }
 
     @Override
+    public UserCharacterResponseDto findUserCharacter(Long userCharacterId, Long userId) {
+        UserCharacter character = userCharacterRepository.findById(userCharacterId)
+                .orElseThrow(() -> new GlobalException(GameErrorCode.CHARACTER_NOT_OWNED));
+
+        return UserCharacterResponseDto.toDto(character);
+    }
+
+    @Override
     @Transactional
     public void updateUserCharacter(Long userCharacterId, UserCharacterUpdateRequestDto requestDto, Long userId) {
         UserCharacter userCharacter = userCharacterRepository.findById(userCharacterId)
@@ -74,6 +84,7 @@ public class UserCharacterServiceImpl implements UserCharacterService {
         }
 
         userCharacter.updateNickname(requestDto.getNickname());
+        userCharacter.updateActivateStatus(requestDto.getIsActive());
     }
 
     @Override
@@ -86,7 +97,7 @@ public class UserCharacterServiceImpl implements UserCharacterService {
             throw new GlobalException(GameErrorCode.PERMISSION_DENIED);
         }
 
-        userCharacter.updateHappiness(10);
+        userCharacter.updateHappiness(userCharacter.getHappiness() + 10);
     }
 
     @Override
@@ -99,6 +110,6 @@ public class UserCharacterServiceImpl implements UserCharacterService {
             throw new GlobalException(GameErrorCode.PERMISSION_DENIED);
         }
 
-        userCharacter.updateHappiness(15);
+        userCharacter.updateExperience(userCharacter.getExperience() + 15);
     }
 }

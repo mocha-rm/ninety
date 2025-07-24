@@ -27,4 +27,16 @@ public class CharacterResponseDto {
         this.imageUrl = character.getImageUrl();
         this.createdAt = character.getCreatedAt();
     }
+
+    public static CharacterResponseDto toDto(Character character) {
+        return new CharacterResponseDto(
+                character.getId(),
+                character.getName(),
+                character.getDescription(),
+                character.getRarity(),
+                character.getPrice(),
+                character.getImageUrl(),
+                character.getCreatedAt()
+        );
+    }
 }

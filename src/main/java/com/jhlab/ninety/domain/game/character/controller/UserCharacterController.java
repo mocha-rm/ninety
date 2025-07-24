@@ -14,44 +14,74 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user-characters")
+@RequestMapping("/api/game")
 public class UserCharacterController {
 
     private final UserCharacterService userCharacterService;
 
-    @PostMapping("/{characterId}/purchase")
-    public ResponseEntity<ApiResponse<Void>> purchaseCharacter(@PathVariable Long characterId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @PostMapping("/characters/{characterId}/purchase")
+    public ResponseEntity<ApiResponse<Void>> purchaseCharacter(
+            @PathVariable Long characterId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         Long userId = userDetails.getUser().getId();
 
         userCharacterService.purchaseCharacter(characterId, userId);
         return ResponseEntity.ok(ApiResponse.success("캐릭터를 구매하였습니다.", null));
     }
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<Slice<UserCharacterResponseDto>>> getUserCharacters(@AuthenticationPrincipal UserDetailsImpl userDetails, Pageable pageable) {
+    @GetMapping("/user-characters")
+    public ResponseEntity<ApiResponse<Slice<UserCharacterResponseDto>>> getUserCharacters(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            Pageable pageable) {
+
         Long userId = userDetails.getUser().getId();
 
-        return ResponseEntity.ok(ApiResponse.success("보유 캐릭터 목록을 조회하였습니다.", userCharacterService.findUserCharacters(userId, pageable)));
+        return ResponseEntity.ok(ApiResponse.success("보유 캐릭터 목록을 조회하였습니다.",
+                userCharacterService.findUserCharacters(userId, pageable))
+        );
     }
 
-    @PatchMapping("/{userCharacterId}")
-    public ResponseEntity<ApiResponse<Void>> updateUserCharacter(@PathVariable Long userCharacterId, @RequestBody UserCharacterUpdateRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @GetMapping("/user-characters/{userCharacterId}")
+    public ResponseEntity<ApiResponse<UserCharacterResponseDto>> findUserCharacter(
+            @PathVariable Long userCharacterId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         Long userId = userDetails.getUser().getId();
 
+        return ResponseEntity.ok(ApiResponse.success("캐릭터 정보를 조회하였습니다.",
+                userCharacterService.findUserCharacter(userCharacterId, userId))
+        );
+    }
+
+    @PatchMapping("/user-characters/{userCharacterId}")
+    public ResponseEntity<ApiResponse<Void>> updateUserCharacter(
+            @PathVariable Long userCharacterId,
+            @RequestBody UserCharacterUpdateRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        Long userId = userDetails.getUser().getId();
         userCharacterService.updateUserCharacter(userCharacterId, requestDto, userId);
+
         return ResponseEntity.ok(ApiResponse.success("캐릭터 정보를 수정하였습니다.", null));
     }
 
-    @PostMapping("/{userCharacterId}/feed")
-    public ResponseEntity<ApiResponse<Void>> feedCharacter(@PathVariable Long userCharacterId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @PostMapping("/user-characters/{userCharacterId}/feeding")
+    public ResponseEntity<ApiResponse<Void>> feedCharacter(
+            @PathVariable Long userCharacterId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         Long userId = userDetails.getUser().getId();
 
         userCharacterService.feedCharacter(userCharacterId, userId);
         return ResponseEntity.ok(ApiResponse.success("캐릭터에게 먹이를 주었습니다.", null));
     }
 
-    @PostMapping("/{userCharacterId}/play")
-    public ResponseEntity<ApiResponse<Void>> playWithCharacter(@PathVariable Long userCharacterId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @PostMapping("/user-characters/{userCharacterId}/playing")
+    public ResponseEntity<ApiResponse<Void>> playWithCharacter(
+            @PathVariable Long userCharacterId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         Long userId = userDetails.getUser().getId();
 
         userCharacterService.playWithCharacter(userCharacterId, userId);

@@ -13,7 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
  */
 @Getter
 @Entity
-@Table(name = "character")
+@Table(name = "characters")
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Character extends BaseEntity {
@@ -21,6 +21,7 @@ public class Character extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String name;
     private String description;
 
@@ -32,6 +33,14 @@ public class Character extends BaseEntity {
     private String imageUrl;
 
     public Character(String name, String description, CharacterRarity rarity, int price, String imageUrl) {
+        this.name = name;
+        this.description = description;
+        this.rarity = rarity;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
+    public void updateCharacter(String name, String description, CharacterRarity rarity, int price, String imageUrl) {
         this.name = name;
         this.description = description;
         this.rarity = rarity;

@@ -14,7 +14,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @Entity
-@Table(name = "user_character")
+@Table(name = "user_characters")
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserCharacter extends BaseEntity {
@@ -47,10 +47,18 @@ public class UserCharacter extends BaseEntity {
     }
 
     public void updateHappiness(int value) {
-        this.happiness += value;
+        this.happiness = value;
+    }
+
+    public void updateExperience(int value) {
+        this.experience = value;
     }
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void updateActivateStatus(boolean isActive) {
+        this.isActive = isActive;
     }
 }
