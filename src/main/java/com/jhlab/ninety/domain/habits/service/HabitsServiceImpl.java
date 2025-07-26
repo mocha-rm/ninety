@@ -48,8 +48,7 @@ public class HabitsServiceImpl implements HabitsService {
     @Override
     @Transactional(readOnly = true)
     public HabitsResponseDto findHabits(Long habitsId) {
-        Habits habits = habitsRepository.findByIdWithUserAndRepeatDays(habitsId)
-                .orElseThrow(() -> new GlobalException(HabitsErrorCode.Habits_NOT_FOUND));
+        Habits habits = getHabitsFromDB(habitsId);
 
         return HabitsResponseDto.toDto(habits);
     }
@@ -85,6 +84,13 @@ public class HabitsServiceImpl implements HabitsService {
         Habits habits = checkAuthorization(habitsId, userDetails);
 
         habitsRepository.delete(habits);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Habits getHabitsFromDB(Long habitsId) {
+        return habitsRepository.findByIdWithUserAndRepeatDays(habitsId)
+                .orElseThrow(() -> new GlobalException(HabitsErrorCode.Habits_NOT_FOUND));
     }
 
     private Habits checkAuthorization(Long habitsId, UserDetailsImpl userDetails) {

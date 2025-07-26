@@ -1,6 +1,8 @@
 package com.jhlab.ninety.domain.game.reward.entity;
 
+import com.jhlab.ninety.domain.auth.entity.User;
 import com.jhlab.ninety.domain.game.reward.type.RewardType;
+import com.jhlab.ninety.domain.habits.entity.Habits;
 import com.jhlab.ninety.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -16,21 +18,39 @@ public class GameReward extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long habitId;
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "habits_id")
+    private Habits habits;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     private Integer coinsEarned;
     private Integer experienceEarned;
+    private Integer foodEarned;
+    private Integer toyEarned;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RewardType rewardType;
 
-    public GameReward(Long habitId, Long userId, Integer coinsEarned, Integer experienceEarned, RewardType rewardType) {
-        this.habitId = habitId;
-        this.userId = userId;
+    // TODO : 리워드 완료 여부 체크
+
+    public GameReward(
+            Habits habits,
+            User user,
+            Integer coinsEarned,
+            Integer experienceEarned,
+            Integer foodEarned,
+            Integer toyEarned,
+            RewardType rewardType) {
+        this.habits = habits;
+        this.user = user;
         this.coinsEarned = coinsEarned;
         this.experienceEarned = experienceEarned;
+        this.foodEarned = foodEarned;
+        this.toyEarned = toyEarned;
         this.rewardType = rewardType;
     }
 }

@@ -29,11 +29,19 @@ public class UserGameData extends BaseEntity {
     @Column(nullable = false)
     private Integer experience;
 
-    public UserGameData(Long userId, Integer coins, Integer level, Integer experience) {
+    @Column(nullable = false)
+    private Integer food;
+
+    @Column(nullable = false)
+    private Integer toy;
+
+    public UserGameData(Long userId, Integer coins, Integer level, Integer experience, Integer food, Integer toy) {
         this.userId = userId;
         this.coins = coins;
         this.level = level;
         this.experience = experience;
+        this.food = food;
+        this.toy = toy;
     }
 
     public void updateCoins(int coins) {
@@ -46,5 +54,13 @@ public class UserGameData extends BaseEntity {
 
     public void updateExperience(int experience) {
         this.experience = experience;
+    }
+
+    public void updateFood(int food) {
+        this.food = food;
+    }
+
+    public void updateToy(int toy) {
+        this.toy = toy;
     }
 }

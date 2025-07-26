@@ -34,10 +34,10 @@ public class UserItemController {
                 .body(ApiResponse.success("아이템 구입 성공", null));
     }
 
-    @GetMapping("/{itemId}")
-    public ResponseEntity<ApiResponse<UserItemResponseDto>> findUserItem(@PathVariable Long itemId) {
+    @GetMapping("/{userItemId}")
+    public ResponseEntity<ApiResponse<UserItemResponseDto>> findUserItem(@PathVariable Long userItemId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.success("아이템 단건 조회 성공", userItemService.getUserItem(itemId)));
+                .body(ApiResponse.success("아이템 단건 조회 성공", userItemService.getUserItem(userItemId)));
     }
 
     @GetMapping

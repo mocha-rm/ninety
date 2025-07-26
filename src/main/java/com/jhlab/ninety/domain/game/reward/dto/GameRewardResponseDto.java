@@ -13,15 +13,19 @@ public class GameRewardResponseDto {
     private final Long userId;
     private final int coinsEarned;
     private final int experienceEarned;
+    private final int foodEarned;
+    private final int toyEarned;
     private final RewardType rewardType;
 
     public static GameRewardResponseDto toDto(GameReward reward) {
         return new GameRewardResponseDto(
                 reward.getId(),
-                reward.getHabitId(),
-                reward.getUserId(),
+                reward.getHabits().getId(),
+                reward.getUser().getId(),
                 reward.getCoinsEarned(),
                 reward.getExperienceEarned(),
+                reward.getFoodEarned(),
+                reward.getToyEarned(),
                 reward.getRewardType()
         );
     }

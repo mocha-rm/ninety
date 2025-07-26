@@ -9,5 +9,7 @@ import lombok.RequiredArgsConstructor;
 public class GameRewardRequestDto {
     private final int coins;
     private final int exp;
+    private final int food;
+    private final int toy;
     private final RewardType rewardType;
 }

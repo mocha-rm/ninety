@@ -6,26 +6,28 @@ public interface PlacedItemService {
     /**
      * 아이템 방에 배치
      *
-     * @param userItemId 보유 아이템 ID
+     * @param roomId     Room ID
      * @param requestDto 배치 좌표 정보
-     * @param email      유저 이메일
+     * @param userId     유저 ID
      */
-    void placeItem(Long userItemId, PlaceItemRequestDto requestDto, String email);
+    void placeItem(Long roomId, PlaceItemRequestDto requestDto, Long userId);
 
     /**
      * 배치된 아이템 위치 수정
      *
+     * @param roomId       Room ID
      * @param placedItemId 배치된 아이템 ID
      * @param requestDto   수정할 좌표 정보
-     * @param email        유저 이메일
+     * @param userId       유저 ID
      */
-    void moveItem(Long placedItemId, PlaceItemRequestDto requestDto, String email);
+    void moveItem(Long roomId, Long placedItemId, PlaceItemRequestDto requestDto, Long userId);
 
     /**
      * 배치된 아이템 해제
      *
+     * @param roomId       Room ID
      * @param placedItemId 배치된 아이템 ID
-     * @param email        유저 이메일
+     * @param userId       유저 ID
      */
-    void removeItem(Long placedItemId, String email);
+    void removeItem(Long roomId, Long placedItemId, Long userId);
 }

@@ -26,9 +26,9 @@ public class PlacedItemServiceImpl implements PlacedItemService {
 
     @Override
     @Transactional
-    public void placeItem(Long userItemId, PlaceItemRequestDto requestDto, String email) {
-        User user = userService.getUserFromDB(email);
-        UserItem userItem = userItemRepository.findById(userItemId)
+    public void placeItem(Long roomId, PlaceItemRequestDto requestDto, Long userId) {
+        User user = userService.getUserFromDB(userId);
+        UserItem userItem = userItemRepository.findById(requestDto.getUserItemId())
                 .orElseThrow(() -> new GlobalException(GameErrorCode.ITEM_NOT_OWNED));
 
         if (!userItem.getUser().getId().equals(user.getId())) {
@@ -57,8 +57,8 @@ public class PlacedItemServiceImpl implements PlacedItemService {
 
     @Override
     @Transactional
-    public void moveItem(Long placedItemId, PlaceItemRequestDto requestDto, String email) {
-        User user = userService.getUserFromDB(email);
+    public void moveItem(Long roomId, Long placedItemId, PlaceItemRequestDto requestDto, Long userId) {
+        User user = userService.getUserFromDB(userId);
         PlacedItem placedRoomItem = placedItemRepository.findById(placedItemId)
                 .orElseThrow(() -> new GlobalException(GameErrorCode.PLACED_ITEM_NOT_FOUND));
 
@@ -76,8 +76,8 @@ public class PlacedItemServiceImpl implements PlacedItemService {
 
     @Override
     @Transactional
-    public void removeItem(Long placedItemId, String email) {
-        User user = userService.getUserFromDB(email);
+    public void removeItem(Long roomId, Long placedItemId, Long userId) {
+        User user = userService.getUserFromDB(userId);
         PlacedItem placedRoomItem = placedItemRepository.findById(placedItemId)
                 .orElseThrow(() -> new GlobalException(GameErrorCode.PLACED_ITEM_NOT_FOUND));
 
