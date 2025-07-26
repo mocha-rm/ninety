@@ -42,7 +42,9 @@ public class UserCharacterServiceImpl implements UserCharacterService {
             throw new GlobalException(GameErrorCode.NOT_ENOUGH_COINS);
         }
 
-        //TODO : 중복 구매 방지하기
+        if (userCharacterRepository.findByUserIdAndCharacterId(user.getId(), character.getId()).isPresent()) {
+            throw new GlobalException(GameErrorCode.CHARACTER_ALREADY_OWNED);
+        }
 
         userGameData.updateCoins(userGameData.getCoins() - character.getPrice());
 
@@ -90,6 +92,8 @@ public class UserCharacterServiceImpl implements UserCharacterService {
     @Override
     @Transactional
     public void feedCharacter(Long userCharacterId, Long userId) {
+        // TODO : 유저 게임 데이터와 연동 필요
+
         UserCharacter userCharacter = userCharacterRepository.findById(userCharacterId)
                 .orElseThrow(() -> new GlobalException(GameErrorCode.CHARACTER_NOT_OWNED));
 
@@ -103,6 +107,8 @@ public class UserCharacterServiceImpl implements UserCharacterService {
     @Override
     @Transactional
     public void playWithCharacter(Long userCharacterId, Long userId) {
+        // TODO : 유저 게임 데이터와 연동 필요
+
         UserCharacter userCharacter = userCharacterRepository.findById(userCharacterId)
                 .orElseThrow(() -> new GlobalException(GameErrorCode.CHARACTER_NOT_OWNED));
 

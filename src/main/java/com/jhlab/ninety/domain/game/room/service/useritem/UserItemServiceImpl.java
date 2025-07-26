@@ -47,7 +47,7 @@ public class UserItemServiceImpl implements UserItemService {
             throw new GlobalException(GameErrorCode.NOT_ENOUGH_COINS);
         }
 
-        // TODO : UserGameData 에 구입 결과 반영하기 (코인정보)
+        userGameData.updateCoins(userGameData.getCoins() - item.getPrice());
 
         UserItem userItem = new UserItem(
                 user,

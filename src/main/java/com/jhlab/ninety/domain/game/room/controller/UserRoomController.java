@@ -29,6 +29,7 @@ public class UserRoomController {
                 .body(ApiResponse.success("방 조회 성공", userRoomService.getUserRoom(userId)));
     }
 
+    //TODO : PathVariable로 배치할 아이템 지정하기
     @PostMapping("/{roomId}/placed-items")
     public ResponseEntity<ApiResponse<Void>> placeItem(
             @PathVariable Long roomId,

@@ -10,4 +10,6 @@ public class PlaceItemRequestDto {
     private final double posX;
     private final double posY;
     private final double rotation;
+
+    // TODO : 아이템 카테고리 추가
 }

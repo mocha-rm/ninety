@@ -13,6 +13,8 @@ public class UserGameDataResponseDto {
     private final int level;
     private final int experience;
 
+    //TODO : 먹이, 장난감 추가 하기
+
     public static UserGameDataResponseDto toDto(UserGameData userGameData) {
         return new UserGameDataResponseDto(
                 userGameData.getId(),

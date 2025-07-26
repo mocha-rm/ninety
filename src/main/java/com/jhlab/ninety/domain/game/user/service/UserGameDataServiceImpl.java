@@ -1,6 +1,5 @@
 package com.jhlab.ninety.domain.game.user.service;
 
-import com.jhlab.ninety.domain.game.user.dto.UserGameDataRequestDto;
 import com.jhlab.ninety.domain.game.user.dto.UserGameDataResponseDto;
 import com.jhlab.ninety.domain.game.user.entity.UserGameData;
 import com.jhlab.ninety.domain.game.user.repository.UserGameDataRepository;
@@ -47,19 +46,19 @@ public class UserGameDataServiceImpl implements UserGameDataService {
         return UserGameDataResponseDto.toDto(data);
     }
 
-    @Override
-    @Transactional
-    public UserGameDataResponseDto updateUserGameData(Long userId, UserGameDataRequestDto requestDto) {
-        UserGameData data = getUserGameDataFromDB(userId);
-
-        data.updateCoins(requestDto.getCoins());
-        data.updateLevel(requestDto.getLevel());
-        data.updateExperience(requestDto.getExperience());
-
-        userGameDataRepository.save(data);
-
-        return UserGameDataResponseDto.toDto(data);
-    }
+//    @Override
+//    @Transactional
+//    public UserGameDataResponseDto updateUserGameData(Long userId, UserGameDataRequestDto requestDto) {
+//        UserGameData data = getUserGameDataFromDB(userId);
+//
+//        data.updateCoins(requestDto.getCoins());
+//        data.updateLevel(requestDto.getLevel());
+//        data.updateExperience(requestDto.getExperience());
+//
+//        userGameDataRepository.save(data);
+//
+//        return UserGameDataResponseDto.toDto(data);
+//    }
 
     @Override
     @Transactional(readOnly = true)

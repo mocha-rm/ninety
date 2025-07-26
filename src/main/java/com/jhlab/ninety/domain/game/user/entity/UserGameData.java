@@ -40,6 +40,8 @@ public class UserGameData extends BaseEntity {
         this.coins = coins;
         this.level = level;
         this.experience = experience;
+        this.food = food;
+        this.toy = toy;
     }
 
     public void updateCoins(int coins) {
