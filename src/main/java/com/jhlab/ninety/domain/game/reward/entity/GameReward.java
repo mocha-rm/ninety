@@ -35,8 +35,6 @@ public class GameReward extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RewardType rewardType;
 
-    // TODO : 리워드 완료 여부 체크
-
     public GameReward(
             Habits habits,
             User user,

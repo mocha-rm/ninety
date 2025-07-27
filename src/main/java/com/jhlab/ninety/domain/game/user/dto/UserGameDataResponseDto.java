@@ -12,8 +12,8 @@ public class UserGameDataResponseDto {
     private final int coins;
     private final int level;
     private final int experience;
-
-    //TODO : 먹이, 장난감 추가 하기
+    private final int food;
+    private final int toy;
 
     public static UserGameDataResponseDto toDto(UserGameData userGameData) {
         return new UserGameDataResponseDto(
@@ -21,7 +21,9 @@ public class UserGameDataResponseDto {
                 userGameData.getUserId(),
                 userGameData.getCoins(),
                 userGameData.getLevel(),
-                userGameData.getExperience()
+                userGameData.getExperience(),
+                userGameData.getFood(),
+                userGameData.getToy()
         );
     }
 }

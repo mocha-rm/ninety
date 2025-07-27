@@ -36,6 +36,8 @@ public class UserCharacter extends BaseEntity {
     private Integer happiness;
     private Boolean isActive;
 
+    private static final int MAX_EXPERIENCE_PER_LEVEL = 100;
+
     public UserCharacter(String nickname, int level, int experience, int happiness, boolean isActive, User user, Character character) {
         this.nickname = nickname;
         this.level = level;
@@ -60,5 +62,14 @@ public class UserCharacter extends BaseEntity {
 
     public void updateActivateStatus(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public boolean canLevelUp() {
+        return this.experience >= MAX_EXPERIENCE_PER_LEVEL;
+    }
+
+    public void levelUp() {
+        this.level++;
+        this.experience -= MAX_EXPERIENCE_PER_LEVEL;
     }
 }

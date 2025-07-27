@@ -11,4 +11,6 @@ public interface UserGameDataService {
     //UserGameDataResponseDto updateUserGameData(Long userId, UserGameDataRequestDto requestDto);
 
     UserGameData getUserGameDataFromDB(Long userId);
+
+    void checkAndProcessLevelUp(UserGameData userGameData);
 }

@@ -1,6 +1,5 @@
 package com.jhlab.ninety.domain.game.reward.controller;
 
-import com.jhlab.ninety.domain.game.reward.dto.GameRewardRequestDto;
 import com.jhlab.ninety.domain.game.reward.dto.GameRewardResponseDto;
 import com.jhlab.ninety.domain.game.reward.service.GameRewardService;
 import com.jhlab.ninety.global.common.exception.response.ApiResponse;
@@ -11,7 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,19 +20,19 @@ import org.springframework.web.bind.annotation.*;
 public class GameRewardController {
     private final GameRewardService gameRewardService;
 
-    @PostMapping("/habit-completion/{habitId}")
-    public ResponseEntity<ApiResponse<GameRewardResponseDto>> createHabitCompletionReward
-            (@PathVariable Long habitId,
-             @AuthenticationPrincipal UserDetailsImpl userDetails,
-             @RequestBody GameRewardRequestDto requestDto) {
-
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.success(
-                        "습관 완료 보상 생성",
-                        gameRewardService.createReward(userDetails.getUser().getId(), habitId, requestDto))
-                );
-    }
+//    @PostMapping("/habit-completion/{habitId}")
+//    public ResponseEntity<ApiResponse<GameRewardResponseDto>> createHabitCompletionReward
+//            (@PathVariable Long habitId,
+//             @AuthenticationPrincipal UserDetailsImpl userDetails,
+//             @RequestBody GameRewardRequestDto requestDto) {
+//
+//
+//        return ResponseEntity.status(HttpStatus.CREATED)
+//                .body(ApiResponse.success(
+//                        "습관 완료 보상 생성",
+//                        gameRewardService.createReward(userDetails.getUser().getId(), habitId, requestDto))
+//                );
+//    }
 
     @GetMapping
     public ResponseEntity<ApiResponse<Page<GameRewardResponseDto>>> getRewardHistory(

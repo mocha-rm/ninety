@@ -92,8 +92,6 @@ public class UserCharacterServiceImpl implements UserCharacterService {
     @Override
     @Transactional
     public void feedCharacter(Long userCharacterId, Long userId) {
-        // TODO : 유저 게임 데이터와 연동 필요
-
         UserCharacter userCharacter = userCharacterRepository.findById(userCharacterId)
                 .orElseThrow(() -> new GlobalException(GameErrorCode.CHARACTER_NOT_OWNED));
 
@@ -101,14 +99,19 @@ public class UserCharacterServiceImpl implements UserCharacterService {
             throw new GlobalException(GameErrorCode.PERMISSION_DENIED);
         }
 
+        UserGameData userGameData = userGameDataService.getUserGameDataFromDB(userId);
+        if (userGameData.getFood() < 1) {
+            throw new GlobalException(GameErrorCode.NOT_ENOUGH_FOOD);
+        }
+
+        userGameData.updateFood(userGameData.getFood() - 1);
         userCharacter.updateHappiness(userCharacter.getHappiness() + 10);
+
     }
 
     @Override
     @Transactional
     public void playWithCharacter(Long userCharacterId, Long userId) {
-        // TODO : 유저 게임 데이터와 연동 필요
-
         UserCharacter userCharacter = userCharacterRepository.findById(userCharacterId)
                 .orElseThrow(() -> new GlobalException(GameErrorCode.CHARACTER_NOT_OWNED));
 
@@ -116,6 +119,16 @@ public class UserCharacterServiceImpl implements UserCharacterService {
             throw new GlobalException(GameErrorCode.PERMISSION_DENIED);
         }
 
+        UserGameData userGameData = userGameDataService.getUserGameDataFromDB(userId);
+        if (userGameData.getToy() < 1) {
+            throw new GlobalException(GameErrorCode.NOT_ENOUGH_TOY);
+        }
+
+        userGameData.updateToy(userGameData.getToy() - 1);
         userCharacter.updateExperience(userCharacter.getExperience() + 15);
+
+        if (userCharacter.canLevelUp()) {
+            userCharacter.levelUp();
+        }
     }
 }

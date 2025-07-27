@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum HabitsErrorCode implements ExceptionType {
     Habits_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 습관을 찾을 수 없습니다."),
+    ALREADY_COMPLETED_TODAY(HttpStatus.BAD_REQUEST, "오늘 이미 완료한 습관입니다."),
     ;
 
     private final HttpStatus httpStatus;

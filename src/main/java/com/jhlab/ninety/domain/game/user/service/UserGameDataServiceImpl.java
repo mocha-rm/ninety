@@ -66,4 +66,12 @@ public class UserGameDataServiceImpl implements UserGameDataService {
         return userGameDataRepository.findByUserId(userId)
                 .orElseThrow(() -> new GlobalException(GameErrorCode.USER_GAME_DATA_NOT_FOUND));
     }
+
+    @Override
+    @Transactional
+    public void checkAndProcessLevelUp(UserGameData userGameData) {
+        while (userGameData.canLevelUp()) {
+            userGameData.levelUp();
+        }
+    }
 }
