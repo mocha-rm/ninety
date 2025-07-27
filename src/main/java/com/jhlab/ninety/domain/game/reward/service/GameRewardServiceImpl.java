@@ -1,7 +1,6 @@
 package com.jhlab.ninety.domain.game.reward.service;
 
 import com.jhlab.ninety.domain.auth.entity.User;
-import com.jhlab.ninety.domain.auth.service.UserService;
 import com.jhlab.ninety.domain.game.reward.dto.GameRewardRequestDto;
 import com.jhlab.ninety.domain.game.reward.dto.GameRewardResponseDto;
 import com.jhlab.ninety.domain.game.reward.entity.GameReward;
@@ -9,27 +8,29 @@ import com.jhlab.ninety.domain.game.reward.repository.GameRewardRepository;
 import com.jhlab.ninety.domain.game.user.entity.UserGameData;
 import com.jhlab.ninety.domain.game.user.service.UserGameDataService;
 import com.jhlab.ninety.domain.habits.entity.Habits;
-import com.jhlab.ninety.domain.habits.service.HabitsService;
+import com.jhlab.ninety.global.common.exception.GlobalException;
+import com.jhlab.ninety.global.common.exception.type.GameErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class GameRewardServiceImpl implements GameRewardService {
     private final GameRewardRepository gameRewardRepository;
-
-    private final UserService userService;
-    private final HabitsService habitsService;
     private final UserGameDataService userGameDataService;
 
     @Override
     @Transactional
-    public GameRewardResponseDto createReward(Long userId, Long habitId, GameRewardRequestDto requestDto) {
-        User user = userService.getUserFromDB(userId);
-        Habits habits = habitsService.getHabitsFromDB(habitId);
+    public GameRewardResponseDto createReward(User user, Habits habits, GameRewardRequestDto requestDto) {
+        if (gameRewardRepository.existsByHabitsAndUserAndCreatedAtAfter(habits, user, LocalDate.now().atStartOfDay())) {
+            throw new GlobalException(GameErrorCode.ALREADY_REWARDED_TODAY);
+        }
+
         UserGameData userGameData = userGameDataService.getUserGameDataFromDB(user.getId());
 
         GameReward reward = new GameReward(
@@ -49,9 +50,7 @@ public class GameRewardServiceImpl implements GameRewardService {
         userGameData.updateFood(userGameData.getFood() + reward.getFoodEarned());
         userGameData.updateToy(userGameData.getToy() + reward.getToyEarned());
 
-        if (userGameData.getExperience() >= 100) {
-            //TODO : 레벨 업 로직
-        }
+        userGameDataService.checkAndProcessLevelUp(userGameData);
 
         return GameRewardResponseDto.toDto(reward);
     }
@@ -63,3 +62,4 @@ public class GameRewardServiceImpl implements GameRewardService {
         return rewards.map(GameRewardResponseDto::toDto);
     }
 }
+

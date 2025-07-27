@@ -1,5 +1,6 @@
 package com.jhlab.ninety.domain.habits.service;
 
+import com.jhlab.ninety.domain.game.reward.dto.GameRewardResponseDto;
 import com.jhlab.ninety.domain.habits.dto.HabitsRequestDto;
 import com.jhlab.ninety.domain.habits.dto.HabitsResponseDto;
 import com.jhlab.ninety.domain.habits.entity.Habits;
@@ -10,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 public interface HabitsService {
     HabitsResponseDto createHabits(HabitsRequestDto requestDto, UserDetailsImpl userDetails);
 
-    HabitsResponseDto findHabits(Long habitsId);
+    HabitsResponseDto findHabits(Long habitsId, UserDetailsImpl userDetails);
 
     Page<HabitsResponseDto> findAllHabits(Pageable pageable, UserDetailsImpl userDetails);
 
@@ -19,4 +20,6 @@ public interface HabitsService {
     void deleteHabits(Long habitsId, UserDetailsImpl userDetails);
 
     Habits getHabitsFromDB(Long habitsId);
+
+    GameRewardResponseDto completeHabit(Long habitId, UserDetailsImpl userDetails);
 }

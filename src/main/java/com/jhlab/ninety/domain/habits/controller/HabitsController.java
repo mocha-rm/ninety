@@ -1,5 +1,6 @@
 package com.jhlab.ninety.domain.habits.controller;
 
+import com.jhlab.ninety.domain.game.reward.dto.GameRewardResponseDto;
 import com.jhlab.ninety.domain.habits.dto.HabitsRequestDto;
 import com.jhlab.ninety.domain.habits.dto.HabitsResponseDto;
 import com.jhlab.ninety.domain.habits.service.HabitsService;
@@ -30,8 +31,9 @@ public class HabitsController {
     }
 
     @GetMapping("/{habitsId}")
-    public ResponseEntity<ApiResponse<HabitsResponseDto>> findHabits(@PathVariable Long habitsId) {
-        HabitsResponseDto response = habitsService.findHabits(habitsId);
+    public ResponseEntity<ApiResponse<HabitsResponseDto>> findHabits(@PathVariable Long habitsId,
+                                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        HabitsResponseDto response = habitsService.findHabits(habitsId, userDetails);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success("습관 조회 성공", response));
     }
@@ -55,10 +57,19 @@ public class HabitsController {
     }
 
     @DeleteMapping("/{habitsId}")
-    public ResponseEntity<ApiResponse<Void>> deleteHabits(@PathVariable Long habitsId,
+    public ResponseEntity<ApiResponse<Void>> deleteHabits( @PathVariable Long habitsId,
                                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
         habitsService.deleteHabits(habitsId, userDetails);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success("습관 삭제 완료", null));
+    }
+
+    @PostMapping("/{habitId}/complete")
+    public ResponseEntity<ApiResponse<GameRewardResponseDto>> completeHabit(
+            @PathVariable Long habitId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        GameRewardResponseDto response = habitsService.completeHabit(habitId, userDetails);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success("습관 완료 보상 지급 성공", response));
     }
 }

@@ -12,6 +12,8 @@ public enum GameErrorCode implements ExceptionType {
     USER_GAME_DATA_EXIST(HttpStatus.CONFLICT, "이미 게임 데이터가 있습니다."),
     ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "아이템을 찾을 수 없습니다."),
     NOT_ENOUGH_COINS(HttpStatus.BAD_REQUEST, "코인이 부족합니다."),
+    NOT_ENOUGH_FOOD(HttpStatus.BAD_REQUEST, "먹이가 부족합니다."),
+    NOT_ENOUGH_TOY(HttpStatus.BAD_REQUEST, "장난감이 부족합니다."),
 
     ALREADY_OWNED_ITEM(HttpStatus.CONFLICT, "이미 보유하고 있는 아이템입니다."),
     ITEM_NOT_OWNED(HttpStatus.FORBIDDEN, "보유하고 있지 않은 아이템입니다."),
@@ -27,7 +29,8 @@ public enum GameErrorCode implements ExceptionType {
     CHARACTER_DUPLICATED(HttpStatus.CONFLICT, "중복된 캐릭터 입니다. (같은 이름의 캐릭터를 생성할 수 없습니다.)"),
     CHARACTER_NOT_OWNED(HttpStatus.FORBIDDEN, "보유하고 있지 않은 캐릭터입니다."),
     CHARACTER_ALREADY_OWNED(HttpStatus.CONFLICT, "이미 보유한 캐릭터입니다."),
-    PERMISSION_DENIED(HttpStatus.FORBIDDEN, "권한이 없습니다.");
+    PERMISSION_DENIED(HttpStatus.FORBIDDEN, "권한이 없습니다."),
+    ALREADY_REWARDED_TODAY(HttpStatus.BAD_REQUEST, "오늘 이미 보상을 받았습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -35,6 +35,8 @@ public class UserGameData extends BaseEntity {
     @Column(nullable = false)
     private Integer toy;
 
+    private static final int MAX_EXPERIENCE_PER_LEVEL = 100;
+
     public UserGameData(Long userId, Integer coins, Integer level, Integer experience, Integer food, Integer toy) {
         this.userId = userId;
         this.coins = coins;
@@ -62,5 +64,14 @@ public class UserGameData extends BaseEntity {
 
     public void updateToy(int toy) {
         this.toy = toy;
+    }
+
+    public boolean canLevelUp() {
+        return this.experience >= MAX_EXPERIENCE_PER_LEVEL;
+    }
+
+    public void levelUp() {
+        this.level++;
+        this.experience -= MAX_EXPERIENCE_PER_LEVEL;
     }
 }

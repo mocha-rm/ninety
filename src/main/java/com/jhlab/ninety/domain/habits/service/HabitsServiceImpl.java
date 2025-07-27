@@ -2,6 +2,12 @@ package com.jhlab.ninety.domain.habits.service;
 
 import com.jhlab.ninety.domain.auth.entity.User;
 import com.jhlab.ninety.domain.auth.service.UserService;
+import com.jhlab.ninety.domain.game.reward.dto.CalculatedReward;
+import com.jhlab.ninety.domain.game.reward.dto.GameRewardRequestDto;
+import com.jhlab.ninety.domain.game.reward.dto.GameRewardResponseDto;
+import com.jhlab.ninety.domain.game.reward.service.GameRewardService;
+import com.jhlab.ninety.domain.game.reward.service.RewardCalculationService;
+import com.jhlab.ninety.domain.game.reward.type.RewardType;
 import com.jhlab.ninety.domain.habits.dto.HabitsRequestDto;
 import com.jhlab.ninety.domain.habits.dto.HabitsResponseDto;
 import com.jhlab.ninety.domain.habits.entity.Habits;
@@ -16,6 +22,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Service
@@ -23,6 +30,8 @@ import java.util.Objects;
 public class HabitsServiceImpl implements HabitsService {
     private final UserService userService;
     private final HabitsRepository habitsRepository;
+    private final GameRewardService gameRewardService;
+    private final RewardCalculationService rewardCalculationService;
 
     @Override
     @Transactional
@@ -47,8 +56,8 @@ public class HabitsServiceImpl implements HabitsService {
 
     @Override
     @Transactional(readOnly = true)
-    public HabitsResponseDto findHabits(Long habitsId) {
-        Habits habits = getHabitsFromDB(habitsId);
+    public HabitsResponseDto findHabits(Long habitsId, UserDetailsImpl userDetails) {
+        Habits habits = checkAuthorization(habitsId, userDetails);
 
         return HabitsResponseDto.toDto(habits);
     }
@@ -84,6 +93,31 @@ public class HabitsServiceImpl implements HabitsService {
         Habits habits = checkAuthorization(habitsId, userDetails);
 
         habitsRepository.delete(habits);
+    }
+
+    @Override
+    @Transactional
+    public GameRewardResponseDto completeHabit(Long habitsId, UserDetailsImpl userDetails) {
+        User user = userService.getUserFromDB(userDetails.getUser().getId());
+        Habits habits = checkAuthorization(habitsId, userDetails);
+
+        if (habits.getLastCompletedDate() != null && habits.getLastCompletedDate().isEqual(LocalDate.now())) {
+            throw new GlobalException(HabitsErrorCode.ALREADY_COMPLETED_TODAY);
+        }
+
+        habits.completeHabit();
+
+        CalculatedReward reward = rewardCalculationService.calculateReward(habits);
+
+        GameRewardRequestDto requestDto = new GameRewardRequestDto(
+                reward.getCoins(),
+                reward.getExp(),
+                reward.getFood(),
+                reward.getToy(),
+                RewardType.HABIT_COMPLETION
+        );
+
+        return gameRewardService.createReward(user, habits, requestDto);
     }
 
     @Override

@@ -46,6 +46,8 @@ public class Habits extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private LocalDate lastCompletedDate;
+
 
     @Builder
     public Habits(String title, String description, LocalDate startAt, LocalDate endAt,
@@ -58,6 +60,10 @@ public class Habits extends BaseEntity {
         this.isAlarmEnabled = isAlarmEnabled;
         this.repeatDays = repeatDays;
         this.user = user;
+    }
+
+    public void completeHabit() {
+        this.lastCompletedDate = LocalDate.now();
     }
 
     public void updateHabits(String title, String description, LocalDate startAt, LocalDate endAt,
