@@ -65,7 +65,8 @@ public class HabitsServiceImpl implements HabitsService {
     @Override
     @Transactional(readOnly = true)
     public Page<HabitsResponseDto> findAllHabits(Pageable pageable, UserDetailsImpl userDetails) {
-        return habitsRepository.findAllByUser(userDetails.getUsername(), pageable).map(HabitsResponseDto::toDto);
+        User user = userService.getUserFromDB(userDetails.getUser().getId());
+        return habitsRepository.findAllByUser(user.getId(), pageable).map(HabitsResponseDto::toDto);
     }
 
     @Override
@@ -79,7 +80,8 @@ public class HabitsServiceImpl implements HabitsService {
                 requestDto.getStartAt(),
                 requestDto.getStartAt().plusDays(90L),
                 requestDto.getReminderTime(),
-                requestDto.isAlarmEnabled()
+                requestDto.isAlarmEnabled(),
+                requestDto.getRepeatDays()
         );
 
         habitsRepository.save(habits);

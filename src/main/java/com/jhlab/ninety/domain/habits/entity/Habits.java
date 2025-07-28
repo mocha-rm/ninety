@@ -1,6 +1,7 @@
 package com.jhlab.ninety.domain.habits.entity;
 
 import com.jhlab.ninety.domain.auth.entity.User;
+import com.jhlab.ninety.domain.game.reward.entity.GameReward;
 import com.jhlab.ninety.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -46,6 +48,9 @@ public class Habits extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "habits", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GameReward> gameRewards;
+
     private LocalDate lastCompletedDate;
 
 
@@ -67,12 +72,13 @@ public class Habits extends BaseEntity {
     }
 
     public void updateHabits(String title, String description, LocalDate startAt, LocalDate endAt,
-                             LocalTime reminderTime, boolean isAlarmEnabled) {
+                             LocalTime reminderTime, boolean isAlarmEnabled, Set<DayOfWeek> repeatDays) {
         this.title = title;
         this.description = description;
         this.startAt = startAt;
         this.endAt = endAt;
         this.reminderTime = reminderTime;
         this.isAlarmEnabled = isAlarmEnabled;
+        this.repeatDays = repeatDays;
     }
 }
