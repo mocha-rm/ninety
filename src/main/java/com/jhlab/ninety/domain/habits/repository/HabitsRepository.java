@@ -16,7 +16,7 @@ public interface HabitsRepository extends JpaRepository<Habits, Long> {
             "WHERE h.id = :id")
     Optional<Habits> findByIdWithUserAndRepeatDays(@Param("id") Long id);
 
-    @Query(value = "SELECT h FROM Habits h JOIN FETCH h.user u WHERE u.email = :userEmail",
-            countQuery = "SELECT COUNT(h) FROM Habits h WHERE h.user.email = :userEmail")
-    Page<Habits> findAllByUser(@Param("userEmail") String userEmail, Pageable pageable);
+    @Query(value = "SELECT h FROM Habits h JOIN FETCH h.user u WHERE u.id = :userId",
+            countQuery = "SELECT COUNT(h) FROM Habits h WHERE h.user.id = :userId")
+    Page<Habits> findAllByUser(@Param("userId") Long userId, Pageable pageable);
 }
