@@ -30,6 +30,8 @@ public class Character extends BaseEntity {
     private CharacterRarity rarity;
 
     private Integer price;
+
+    @Lob
     private String imageUrl;
 
     public Character(String name, String description, CharacterRarity rarity, int price, String imageUrl) {

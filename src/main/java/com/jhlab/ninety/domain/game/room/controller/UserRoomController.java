@@ -29,14 +29,15 @@ public class UserRoomController {
                 .body(ApiResponse.success("방 조회 성공", userRoomService.getUserRoom(userId)));
     }
 
-    //TODO : PathVariable로 배치할 아이템 지정하기
-    @PostMapping("/{roomId}/placed-items")
+
+    @PostMapping("/{roomId}/placed-items/{userItemId}")
     public ResponseEntity<ApiResponse<Void>> placeItem(
             @PathVariable Long roomId,
+            @PathVariable Long userItemId,
             @RequestBody PlaceItemRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        placedItemService.placeItem(roomId, requestDto, userDetails.getUser().getId());
+        placedItemService.placeItem(roomId, userItemId, requestDto, userDetails.getUser().getId());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success("아이템 방에 배치 성공", null));
     }
