@@ -1,5 +1,7 @@
 package com.jhlab.ninety.domain.game.character.service;
 
+import com.jhlab.ninety.domain.game.character.dto.UserCharacterActivationRequestDto;
+import com.jhlab.ninety.domain.game.character.dto.UserCharacterNicknameUpdateDto;
 import com.jhlab.ninety.domain.game.character.dto.UserCharacterResponseDto;
 import com.jhlab.ninety.domain.game.character.dto.UserCharacterUpdateRequestDto;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +14,9 @@ public interface UserCharacterService {
 
     UserCharacterResponseDto findUserCharacter(Long userCharacterId, Long userId);
 
-    void updateUserCharacter(Long userCharacterId, UserCharacterUpdateRequestDto requestDto, Long userId);
+    UserCharacterResponseDto manageActivation(Long userCharacterId, UserCharacterActivationRequestDto requestDto, Long userId);
+
+    UserCharacterResponseDto updateCharacterNickname(Long userCharacterId, UserCharacterNicknameUpdateDto dto, Long userId);
 
     void feedCharacter(Long userCharacterId, Long userId);
 

@@ -10,7 +10,7 @@ public interface PlacedItemService {
      * @param requestDto 배치 좌표 정보
      * @param userId     유저 ID
      */
-    void placeItem(Long roomId, PlaceItemRequestDto requestDto, Long userId);
+    void placeItem(Long roomId, Long userItemId, PlaceItemRequestDto requestDto, Long userId);
 
     /**
      * 배치된 아이템 위치 수정

@@ -29,6 +29,8 @@ public class RoomItem extends BaseEntity {
     private ItemCategory category;
 
     private Integer price;
+
+    @Lob
     private String imageUrl;
 
     public RoomItem(String name, String description, ItemCategory category, int price, String imageUrl) {

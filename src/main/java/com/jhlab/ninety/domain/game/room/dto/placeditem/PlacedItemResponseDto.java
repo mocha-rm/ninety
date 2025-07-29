@@ -13,6 +13,7 @@ public class PlacedItemResponseDto {
     private final double posX;
     private final double posY;
     private final double rotation;
+    private final String imageUrl;
 
     public PlacedItemResponseDto(PlacedItem placedItem) {
         this.id = placedItem.getId();
@@ -21,5 +22,6 @@ public class PlacedItemResponseDto {
         this.posX = placedItem.getPosX();
         this.posY = placedItem.getPosY();
         this.rotation = placedItem.getRotation();
+        this.imageUrl = placedItem.getItem().getImageUrl();
     }
 }

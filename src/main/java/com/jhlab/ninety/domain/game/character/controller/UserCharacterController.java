@@ -1,7 +1,8 @@
 package com.jhlab.ninety.domain.game.character.controller;
 
+import com.jhlab.ninety.domain.game.character.dto.UserCharacterActivationRequestDto;
+import com.jhlab.ninety.domain.game.character.dto.UserCharacterNicknameUpdateDto;
 import com.jhlab.ninety.domain.game.character.dto.UserCharacterResponseDto;
-import com.jhlab.ninety.domain.game.character.dto.UserCharacterUpdateRequestDto;
 import com.jhlab.ninety.domain.game.character.service.UserCharacterService;
 import com.jhlab.ninety.global.common.exception.response.ApiResponse;
 import com.jhlab.ninety.global.security.auth.UserDetailsImpl;
@@ -54,16 +55,42 @@ public class UserCharacterController {
         );
     }
 
-    @PatchMapping("/user-characters/{userCharacterId}")
-    public ResponseEntity<ApiResponse<Void>> updateUserCharacter(
+//    @PatchMapping("/user-characters/{userCharacterId}")
+//    public ResponseEntity<ApiResponse<Void>> updateUserCharacter(
+//            @PathVariable Long userCharacterId,
+//            @RequestBody UserCharacterUpdateRequestDto requestDto,
+//            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//
+//        Long userId = userDetails.getUser().getId();
+//        userCharacterService.updateUserCharacter(userCharacterId, requestDto, userId);
+//
+//        return ResponseEntity.ok(ApiResponse.success("캐릭터 정보를 수정하였습니다.", null));
+//    }
+
+    @PatchMapping("/user-characters/{userCharacterId}/activation")
+    public ResponseEntity<ApiResponse<UserCharacterResponseDto>> manageCharacterActivation(
             @PathVariable Long userCharacterId,
-            @RequestBody UserCharacterUpdateRequestDto requestDto,
+            @RequestBody UserCharacterActivationRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         Long userId = userDetails.getUser().getId();
-        userCharacterService.updateUserCharacter(userCharacterId, requestDto, userId);
 
-        return ResponseEntity.ok(ApiResponse.success("캐릭터 정보를 수정하였습니다.", null));
+        return ResponseEntity.ok(ApiResponse.success("유저 활성화 상태 업데이트 성공",
+                userCharacterService.manageActivation(userCharacterId, requestDto, userId))
+        );
+    }
+
+    @PatchMapping("/user-characters/{userCharacterId}")
+    public ResponseEntity<ApiResponse<UserCharacterResponseDto>> updateCharacterNickname(
+            @PathVariable Long userCharacterId,
+            @RequestBody UserCharacterNicknameUpdateDto updateDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        Long userId = userDetails.getUser().getId();
+
+        return ResponseEntity.ok(ApiResponse.success("캐릭터 닉네임 변경 성공",
+                userCharacterService.updateCharacterNickname(userCharacterId, updateDto, userId))
+        );
     }
 
     @PostMapping("/user-characters/{userCharacterId}/feeding")

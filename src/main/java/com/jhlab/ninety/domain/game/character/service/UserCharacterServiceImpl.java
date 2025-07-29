@@ -2,8 +2,9 @@ package com.jhlab.ninety.domain.game.character.service;
 
 import com.jhlab.ninety.domain.auth.entity.User;
 import com.jhlab.ninety.domain.auth.service.UserService;
+import com.jhlab.ninety.domain.game.character.dto.UserCharacterActivationRequestDto;
+import com.jhlab.ninety.domain.game.character.dto.UserCharacterNicknameUpdateDto;
 import com.jhlab.ninety.domain.game.character.dto.UserCharacterResponseDto;
-import com.jhlab.ninety.domain.game.character.dto.UserCharacterUpdateRequestDto;
 import com.jhlab.ninety.domain.game.character.entity.Character;
 import com.jhlab.ninety.domain.game.character.entity.UserCharacter;
 import com.jhlab.ninety.domain.game.character.repository.CharacterRepository;
@@ -68,6 +69,7 @@ public class UserCharacterServiceImpl implements UserCharacterService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserCharacterResponseDto findUserCharacter(Long userCharacterId, Long userId) {
         UserCharacter character = userCharacterRepository.findById(userCharacterId)
                 .orElseThrow(() -> new GlobalException(GameErrorCode.CHARACTER_NOT_OWNED));
@@ -77,7 +79,7 @@ public class UserCharacterServiceImpl implements UserCharacterService {
 
     @Override
     @Transactional
-    public void updateUserCharacter(Long userCharacterId, UserCharacterUpdateRequestDto requestDto, Long userId) {
+    public UserCharacterResponseDto manageActivation(Long userCharacterId, UserCharacterActivationRequestDto requestDto, Long userId) {
         UserCharacter userCharacter = userCharacterRepository.findById(userCharacterId)
                 .orElseThrow(() -> new GlobalException(GameErrorCode.CHARACTER_NOT_OWNED));
 
@@ -85,8 +87,24 @@ public class UserCharacterServiceImpl implements UserCharacterService {
             throw new GlobalException(GameErrorCode.PERMISSION_DENIED);
         }
 
-        userCharacter.updateNickname(requestDto.getNickname());
         userCharacter.updateActivateStatus(requestDto.getIsActive());
+
+        return UserCharacterResponseDto.toDto(userCharacter);
+    }
+
+    @Override
+    @Transactional
+    public UserCharacterResponseDto updateCharacterNickname(Long userCharacterId, UserCharacterNicknameUpdateDto dto, Long userId) {
+        UserCharacter userCharacter = userCharacterRepository.findById(userCharacterId)
+                .orElseThrow(() -> new GlobalException(GameErrorCode.CHARACTER_NOT_OWNED));
+
+        if (!Objects.equals(userCharacter.getUser().getId(), userId)) {
+            throw new GlobalException(GameErrorCode.PERMISSION_DENIED);
+        }
+
+        userCharacter.updateNickname(dto.getNickname());
+
+        return UserCharacterResponseDto.toDto(userCharacter);
     }
 
     @Override

@@ -26,9 +26,9 @@ public class PlacedItemServiceImpl implements PlacedItemService {
 
     @Override
     @Transactional
-    public void placeItem(Long roomId, PlaceItemRequestDto requestDto, Long userId) {
+    public void placeItem(Long roomId, Long userItemId, PlaceItemRequestDto requestDto, Long userId) {
         User user = userService.getUserFromDB(userId);
-        UserItem userItem = userItemRepository.findById(requestDto.getUserItemId())
+        UserItem userItem = userItemRepository.findById(userItemId)
                 .orElseThrow(() -> new GlobalException(GameErrorCode.ITEM_NOT_OWNED));
 
         if (!userItem.getUser().getId().equals(user.getId())) {
